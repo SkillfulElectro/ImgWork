@@ -4,13 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ImgWork - Any-to-Any Image Converter</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f172a">
-    <link rel="stylesheet" href="css/styles.css">
     
-    <!-- External Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/browser-image-compression/1.0.13/browser-image-compression.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/upng-js/2.1.0/UPNG.min.js" defer></script>
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#38bdf8">
+    
+    <!-- iOS Installability Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ImgWork">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+    <!-- External Libraries (Crossorigin added for caching stability) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/browser-image-compression/1.0.13/browser-image-compression.min.js" crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/upng-js/2.1.0/UPNG.min.js" crossorigin="anonymous" defer></script>
+
+    <!-- App Styles -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <header>
@@ -51,7 +61,7 @@
         <section class="results" id="results"></section>
     </main>
 
-    <!-- Internal JS Modules -->
+    <!-- Internal JS Modules (Order matters) -->
     <script src="js/compressor.js" defer></script>
     <script src="js/converter.js" defer></script>
     <script src="js/ui.js" defer></script>
@@ -61,7 +71,9 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(err => console.error('SW failed:', err));
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registered.', reg))
+                    .catch(err => console.error('SW registration failed:', err));
             });
         }
     </script>
