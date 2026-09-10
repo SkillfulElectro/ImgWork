@@ -57,6 +57,22 @@ class UIController {
         this.resultsContainer.prepend(card);
     }
 
+    displayError(originalFile, error) {
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        card.style.borderColor = '#ef4444';
+        card.innerHTML = `
+            <div style="width:60px;height:60px;background:#7f1d1d;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-right:1rem;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fecaca" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </div>
+            <div class="result-info">
+                <h4>${originalFile.name}</h4>
+                <p style="color:#fca5a5;">Failed: ${error.message}</p>
+            </div>
+        `;
+        this.resultsContainer.prepend(card);
+    }
+
     formatBytes(bytes) {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
