@@ -9,6 +9,9 @@ class UIController {
         this.maxWidthInput = document.getElementById('maxWidth');
         this.processBtn = document.getElementById('processBtn');
         this.resultsContainer = document.getElementById('results');
+        this.previewSection = document.getElementById('previewSection');
+        this.previewGrid = document.getElementById('previewGrid');
+        this.fileCount = document.getElementById('fileCount');
         
         this.selectedFiles = [];
         this.init();
@@ -31,9 +34,39 @@ class UIController {
     handleFiles(fileList) {
         this.selectedFiles = Array.from(fileList);
         this.processBtn.disabled = this.selectedFiles.length === 0;
+        this.renderPreviews();
+    }
+
+    renderPreviews() {
+        this.previewGrid.innerHTML = '';
+        
+        if (this.selectedFiles.length === 0) {
+            this.previewSection.style.display = 'none';
+            return;
+        }
+
+        this.previewSection.style.display = 'block';
+        this.fileCount.textContent = this.selectedFiles.length;
+
+        this.selectedFiles.forEach(file => {
+            const item = document.createElement('div');
+            item.className = 'preview-item';
+            
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            
+            const name = document.createElement('div');
+            name.className = 'file-name';
+            name.textContent = file.name;
+            
+            item.appendChild(img);
+            item.appendChild(name);
+            this.previewGrid.appendChild(item);
+        });
     }
 
     triggerProcessing() {
+        console.log('Processing triggered with options:', this.formatSelect.value);
         const options = {
             format: this.formatSelect.value,
             quality: parseInt(this.qualityInput.value) / 100,
