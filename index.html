@@ -14,6 +14,7 @@
     <meta name="apple-mobile-web-app-title" content="ImgWork">
     <link rel="apple-touch-icon" href="icons/icon.svg">
 
+    <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/browser-image-compression/1.0.13/browser-image-compression.min.js" crossorigin="anonymous" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/upng-js/2.1.0/UPNG.min.js" crossorigin="anonymous" defer></script>
 
@@ -32,6 +33,12 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                 <span>Drag & Drop images or <strong>Click to Browse</strong></span>
             </label>
+        </section>
+
+        <!-- NEW: Preview Section -->
+        <section class="preview-section" id="previewSection" style="display:none;">
+            <h3>Selected Images (<span id="fileCount">0</span>)</h3>
+            <div class="preview-grid" id="previewGrid"></div>
         </section>
 
         <section class="controls" id="controls">
@@ -53,17 +60,19 @@
                 <label><input type="checkbox" id="resizeToggle"> Resize to max width</label>
                 <input type="number" id="maxWidth" value="1920" disabled>
             </div>
-            <button id="processBtn" class="primary-btn">Process Images</button>
+            <button id="processBtn" class="primary-btn" disabled>Process Images</button>
         </section>
 
         <section class="results" id="results"></section>
     </main>
 
+    <!-- Internal JS Modules -->
     <script src="js/compressor.js" defer></script>
     <script src="js/converter.js" defer></script>
     <script src="js/ui.js" defer></script>
     <script src="js/app.js" defer></script>
     
+    <!-- PWA Registration -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
