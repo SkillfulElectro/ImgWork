@@ -1,15 +1,19 @@
 class ImageCompressor {
     constructor() {
-        if (typeof browserImageCompression === 'undefined') {
-            throw new Error('browser-image-compression library not loaded');
-        }
+        // Removed the throw error to prevent app crash on load
     }
 
     async compress(file, options) {
+        // Check if library is available at runtime
+        if (typeof browserImageCompression === 'undefined') {
+            console.warn('browser-image-compression library not loaded. Skipping compression.');
+            return file; // Return original file if library missing
+        }
+
         const compressionOptions = {
-            maxSizeMB: 10, // Fallback limit
+            maxSizeMB: 10, 
             maxWidthOrHeight: options.maxWidth || undefined,
-            useWebWorker: true, // Keeps UI responsive
+            useWebWorker: true, 
             initialQuality: options.quality || 0.8
         };
 
