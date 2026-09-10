@@ -5,21 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ImgWork - Any-to-Any Image Converter</title>
     
-    <!-- PWA Meta Tags -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#38bdf8">
     
-    <!-- iOS Installability Meta Tags -->
+    <!-- iOS Installability -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ImgWork">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
 
-    <!-- External Libraries (Crossorigin added for caching stability) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/browser-image-compression/1.0.13/browser-image-compression.min.js" crossorigin="anonymous" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/upng-js/2.1.0/UPNG.min.js" crossorigin="anonymous" defer></script>
 
-    <!-- App Styles -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -42,9 +39,10 @@
                 <label for="formatSelect">Convert To:</label>
                 <select id="formatSelect">
                     <option value="jpeg">JPEG</option>
-                    <option value="png">PNG (UPNG)</option>
-                    <option value="webp">WebP</option>
-                    <option value="bmp">BMP</option>
+                    <option value="png">PNG (High Quality)</option>
+                    <option value="webp">WebP (Modern Web)</option>
+                    <option value="avif">AVIF (Next-Gen)</option>
+                    <option value="bmp">BMP (Bitmap)</option>
                 </select>
             </div>
             <div class="control-group">
@@ -61,13 +59,11 @@
         <section class="results" id="results"></section>
     </main>
 
-    <!-- Internal JS Modules (Order matters) -->
     <script src="js/compressor.js" defer></script>
     <script src="js/converter.js" defer></script>
     <script src="js/ui.js" defer></script>
     <script src="js/app.js" defer></script>
     
-    <!-- PWA Registration -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
