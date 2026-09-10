@@ -1,8 +1,6 @@
 class ImageConverter {
     constructor() {
-        if (typeof UPNG === 'undefined') {
-            throw new Error('UPNG.js library not loaded');
-        }
+        // Removed the throw error to prevent app crash on load
     }
 
     async convert(file, targetFormat, quality = 0.8, maxWidth = null) {
@@ -14,7 +12,6 @@ class ImageConverter {
                     let width = img.width;
                     let height = img.height;
                     
-                    // Handle resizing if not already done by compressor
                     if (maxWidth && width > maxWidth) {
                         const ratio = maxWidth / width;
                         width = maxWidth;
@@ -28,21 +25,32 @@ class ImageConverter {
                     ctx.drawImage(img, 0, 0, width, height);
 
                     if (targetFormat === 'png') {
-                        // Use UPNG.js for high-quality PNG
-                        const imageData = ctx.getImageData(0, 0, width, height);
-                        const pngBuffer = UPNG.encode([imageData.data.buffer], width, height);
-                        const blob = new Blob([pngBuffer], { type: 'image/png' });
-                        resolve(this._createFile(blob, file.name, 'png'));
+                        // Use UPNG.js if available, otherwise fallback to native canvas
+                        if (typeof UPNG !== 'undefined') {
+                            try {
+                                const imageData = ctx.getImageData(0, 0, width, height);
+                                const pngBuffer = UPNG.encode([imageData.data.buffer], width, height);
+                                const blob = new Blob([pngBuffer], { type: 'image/png' });
+                                resolve(this._createFile(blob, file.name, 'png'));
+                                return;
+                            } catch (e) {
+                                console.warn('UPNG failed, falling back to canvas', e);
+                            }
+                        }
+                        
+                        // Fallback for PNG
+                        canvas.toBlob((blob) => {
+                            resolve(this._createFile(blob, file.name, 'png'));
+                        }, 'image/png');
                     } else {
                         let mimeType = `image/${targetFormat}`;
                         
-                        // Try native conversion (JPEG, WebP, AVIF, BMP)
                         canvas.toBlob((blob) => {
                             if (blob) {
                                 resolve(this._createFile(blob, file.name, targetFormat));
                             } else {
-                                // Fallback: If AVIF isn't supported by this browser, fallback to WebP then JPEG
-                                console.warn(`Format ${targetFormat} not natively supported, falling back...`);
+                                // Fallback: If AVIF isn't supported by this browser, fallback to WebP
+                                console.warn(`Format ${targetFormat} not natively supported, falling back to WebP...`);
                                 canvas.toBlob((fallbackBlob) => {
                                     resolve(this._createFile(fallbackBlob, file.name, 'webp'));
                                 }, 'image/webp', quality);
