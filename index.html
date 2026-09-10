@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImgWork - Any-to-Any Image Converter</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/browser-image-compression/1.0.13/browser-image-compression.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/upng-js/2.1.0/UPNG.min.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>ImgWork</h1>
+        <p>Fast, client-side image conversion and compression.</p>
+    </header>
+
+    <main>
+        <section class="upload-section">
+            <input type="file" id="fileInput" accept="image/*" multiple>
+            <label for="fileInput" class="drop-zone" id="dropZone">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <span>Drag & Drop images or <strong>Click to Browse</strong></span>
+            </label>
+        </section>
+
+        <section class="controls" id="controls">
+            <div class="control-group">
+                <label for="formatSelect">Convert To:</label>
+                <select id="formatSelect">
+                    <option value="jpeg">JPEG</option>
+                    <option value="png">PNG (UPNG)</option>
+                    <option value="webp">WebP</option>
+                    <option value="bmp">BMP</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="qualityInput">Quality (1-100): <span id="qualityValue">80</span></label>
+                <input type="range" id="qualityInput" min="1" max="100" value="80">
+            </div>
+            <div class="control-group">
+                <label><input type="checkbox" id="resizeToggle"> Resize to max width</label>
+                <input type="number" id="maxWidth" value="1920" disabled>
+            </div>
+            <button id="processBtn" class="primary-btn">Process Images</button>
+        </section>
+
+        <section class="results" id="results"></section>
+    </main>
+
+    <!-- Internal JS Modules -->
+    <script src="js/compressor.js" defer></script>
+    <script src="js/converter.js" defer></script>
+    <script src="js/ui.js" defer></script>
+    <script src="js/app.js" defer></script>
+    
+    <!-- PWA Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.error('SW failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>
