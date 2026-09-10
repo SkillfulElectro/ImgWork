@@ -5,6 +5,7 @@ class ImgWorkApp {
         this.converter = new ImageConverter();
         
         document.addEventListener('processImages', async (e) => {
+            console.log('Event received, starting process...');
             await this.processAll(e.detail.files, e.detail.options);
         });
     }
@@ -12,16 +13,16 @@ class ImgWorkApp {
     async processAll(files, options) {
         this.ui.processBtn.disabled = true;
         this.ui.processBtn.textContent = 'Processing...';
+        this.ui.resultsContainer.innerHTML = ''; // Clear previous results
 
         for (const file of files) {
             try {
                 let processedFile = file;
                 
-                // Determine if we should use the Web Worker compressor
                 const isCompressorSupported = ['jpeg', 'png', 'webp', 'bmp'].includes(options.format);
                 const needsCompression = options.resize || options.quality < 1;
                 
-                // 1. Compress via Web Worker (if format is supported by browser-image-compression)
+                // 1. Compress via Web Worker (if format is supported)
                 if (needsCompression && isCompressorSupported) {
                     processedFile = await this.compressor.compress(file, {
                         maxWidth: options.resize ? options.maxWidth : undefined,
@@ -36,7 +37,6 @@ class ImgWorkApp {
                         processedFile, 
                         options.format, 
                         options.quality, 
-                        // Pass resize params only if compressor didn't handle them (e.g., AVIF)
                         (needsCompression && !isCompressorSupported) ? options.maxWidth : null
                     );
                 } else {
@@ -47,7 +47,7 @@ class ImgWorkApp {
                 this.ui.displayResult(file, processedFile);
             } catch (err) {
                 console.error(`Failed to process ${file.name}:`, err);
-                this.ui.displayError(file, err); // Show error in UI
+                this.ui.displayError(file, err);
             }
         }
         this.ui.processBtn.disabled = false;
@@ -56,5 +56,6 @@ class ImgWorkApp {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('ImgWork App Initialized');
     window.app = new ImgWorkApp();
 });
